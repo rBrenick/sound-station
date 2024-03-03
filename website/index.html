@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sound Station</title>
+    <link href="reset.css" rel="stylesheet" type="text/css">
+    <link href="style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+    <h1 style="padding-bottom:50px">Sound Station</h1>
+
+    <div style="display: flex;padding-bottom:40px;">
+        <input type="text" id="video-url" style="width: 50em;" name="fname" value="https://www.youtube.com/watch?v=v-n1vGeVIXo">
+        <button onclick="addToQueue()" id="add-queue-button">
+            Add to Queue
+        </button>
+        <button onclick="playVideo()" id="play-video-button">
+            Play Video
+        </button>
+    </div>
+    
+    <div style="display: flex;padding-bottom:10px;"">
+        <h3>Currently Playing: </h3>
+        <h3 id="current-video-title"></h3>
+    </div>
+    
+    <button onclick="refreshView()" id="refresh-queue-button" style="margin-top:30px;margin-bottom:20px;">
+        Refresh
+    </button>
+    
+    <div style="display: flex;padding-bottom:50px;">
+        <div>
+            <h3>Queue</h3>
+            <div id="queue-list"></div>
+        </div>
+        <div style="margin-left: auto;">
+            <h3>History</h3>
+            <div id="history-list"></div>
+        </div>
+    </div>
+    
+    
+    <script src="app.js"></script>
+</body>
+
+</html>

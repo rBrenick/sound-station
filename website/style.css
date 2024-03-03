@@ -1,0 +1,104 @@
+@charset "utf-8";
+/* CSS Document */
+
+body {
+    background-color: #282629;
+    margin: 1em auto;
+    max-width: 40em;
+    /* padding: 0 .3em; */
+    font: 1.2em/1.62 sans-serif;
+    /* display: block; */
+}
+
+h1 {
+    color: #909090;
+    text-align: center;
+    display: block;
+    font-size: 3em;
+    font-weight: bold;
+}
+
+h2 {
+    color: #909090;
+    display: block;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+h3 {
+    color: #909090;
+    display: block;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+p {
+    color: #cbcbcb;
+    font-size: 1em;
+}
+
+button {
+    color: #e0e0e0;
+    background-color: rgb(53, 53, 53);
+    font-size: 1.2em;
+}
+
+#mark-good-button {
+    background-color: rgb(58, 100, 58);
+}
+
+#mark-good-button:disabled {
+    color: #8d8d8d;
+    background-color: rgb(53, 53, 53);
+}
+
+.asset-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 150px;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+a {
+    color: #3A96B8;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #ffffff;
+}
+
+.img-comp-container {
+    position: relative;
+    height: 500px;
+    /*should be the same height as the images*/
+}
+
+.img-comp-img {
+    position: absolute;
+    width: auto;
+    height: auto;
+    overflow: hidden;
+}
+
+.img-comp-img img {
+    display: block;
+}
+
+.img-comp-slider {
+    position: absolute;
+    z-index: 9;
+    cursor: ew-resize;
+    /*set the appearance of the slider:*/
+    width: 150px;
+    height: 50px;
+    background-color: #939393;
+    opacity: 0.7;
+    border-radius: 30%;
+}
