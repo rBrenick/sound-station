@@ -20,7 +20,8 @@ class StationHandler(object):
         self.driver = webdriver.Chrome(chrome_options=chrome_options)
 
         self.queue = []
-        self.currently_playing = ""
+        
+        self.starting_video_title = ""
         
         thread = threading.Thread(target=self.video_thread)
         thread.start()
@@ -28,6 +29,7 @@ class StationHandler(object):
     def video_thread(self):
         # play silence to get past cookie prompt
         self.driver.get('https://www.youtube.com/watch?v=g4mHPeMGTJM')
+        self.starting_video_title = self.get_current_video_title()
         cookie_button_xpath = "//button[@aria-label='Accept the use of cookies and other data for the purposes described']"
         # cookie_button_xpath = "//button[@aria-label='Reject the use of cookies and other data for the purposes described']"
         cookie = WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH, cookie_button_xpath)))
@@ -52,22 +54,24 @@ class StationHandler(object):
         
     def play_next_in_queue(self):
         queue_data = self.queue[0]
-        print(f"Playing queued video: {queue_data.get('title')}")
         del self.queue[0]
+        print(f"Playing queued video: {queue_data.get('title')}")
         self.play_youtube_video(queue_data.get("url"), queue_data.get("title"))
 
     def play_youtube_video(self, url, title=None):
-        if title is None:
-            title = utils.get_video_title(url)
-        self.currently_playing = title
+        
         self.driver.get(url)
+        
+        if title is None:
+            title = self.get_current_video_title()
         history_handler.INSTANCE.add_to_history(url, title)
     
     def get_current_video_title(self):
         return self.driver.execute_script("return document.title").replace(" - YouTube", "")
     
     def video_is_playing(self):
-        if self.get_current_video_title() != self.currently_playing:
+        # if we're still on the starting "10-hour silence", we can say it's not playing any video
+        if self.get_current_video_title() == self.starting_video_title:
             return False
         return self.driver.execute_script("return document.getElementById('movie_player').getPlayerState()") == 1
 

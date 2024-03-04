@@ -4,7 +4,6 @@ function playVideo() {
     fetch('/play-video?' + new URLSearchParams({
         'target_url': document.getElementById("video-url").value
     }))
-        .then(response => response.json())
         .then(refreshView())
         .catch(error => console.error(error));
 }
@@ -14,10 +13,9 @@ function addToQueue() {
 }
 
 function addUrlToQueue(url) {
-    fetch('/add-queue?' + new URLSearchParams({
+    fetch('/add-to-queue?' + new URLSearchParams({
         'target_url': url
     }))
-        .then(response => response.json())
         .then(refreshView())
         .catch(error => console.error(error));
 }
@@ -26,7 +24,6 @@ function removeFromQueue(index) {
     fetch('/remove-from-queue?' + new URLSearchParams({
         'queue_index': index
     }))
-        .then(response => response.json())
         .then(refreshView())
         .catch(error => console.error(error));
 }
@@ -38,7 +35,6 @@ function clearList(listElement) {
 }
 
 function parseQueue(queueData) {
-    console.log("refreshing queue...");
     clearList(document.getElementById("queue-list"));
     
     if (Object.keys(queueData).length == 0) {
@@ -69,7 +65,7 @@ function parseQueue(queueData) {
 }
 
 function parseHistory(historyData) {
-    console.log("refreshing history...");
+    
     clearList(document.getElementById("history-list"));
     
     if (Object.keys(historyData).length == 0) {
@@ -102,7 +98,6 @@ function parseHistory(historyData) {
 }
 
 function parseTitle(titleData) {
-    console.log("refreshing title...");
     title_element = document.getElementById("current-video-title");
     if (titleData == ""){
         titleData = "Unknown"
@@ -111,6 +106,8 @@ function parseTitle(titleData) {
 }
 
 function refreshView() {
+    console.log("refreshing view...");
+    
     fetch('./queue-list', {})
         .then((response) => response.json())
         .then((json) => parseQueue(json));
