@@ -13,40 +13,42 @@
 
     <h1 style="padding-bottom:50px">Sound Station</h1>
 
-    <div style="display: flex;padding-bottom:40px;">
+    <div style="display: flex;padding-bottom: 2em;">
         <input type="text" id="video-url" style="width: 50em;" name="fname" value="https://www.youtube.com/watch?v=v-n1vGeVIXo">
-        <button onclick="addToQueue()" id="add-queue-button">
+        <button onclick="addToQueue()">
             Add to Queue
         </button>
-        <button onclick="playVideoFromURL()" id="play-video-button">
+        <button onclick="playVideoFromURL()">
             Play Video
         </button>
     </div>
     
-    <div style="display: flex;padding-bottom:10px;"">
+    <button onclick="refreshView()" style="margin-bottom: 2em;">
+        Refresh
+    </button>
+    
+    <div style="display: flex;padding-bottom: 0.5em;">
         <h3>Currently Playing: </h3>
         <h3 id="current-video-title"></h3>
     </div>
     
-    <div style="display: flex;padding-bottom:10px;"">
+    <div style="display: flex;padding-bottom: 2em;">
         <input type="range" min="1" max="100" value="50" id="volumeSlider">
         <button onclick="pauseVideo()"> || </button>
         <button onclick="playVideo()"> > </button>
     </div>
     
-    <button onclick="refreshView()" id="refresh-queue-button" style="margin-top:30px;margin-bottom:20px;">
-        Refresh
-    </button>
-    
-    <div style="display: flex;padding-bottom:50px;">
-        <div>
-            <h3>Queue</h3>
-            <div id="queue-list"></div>
+
+    <div style="padding-bottom: 2em;">
+        <div style="display: flex;">
+            <h3 style="padding-right: 0.5em;">Queue</h3>
+            <button onclick="playNextVideoInQueue()"> >>| </button>
         </div>
-        <div style="margin-left: auto;">
-            <h3>History</h3>
-            <div id="history-list"></div>
-        </div>
+        <div id="queue-list"></div>
+    </div>
+    <div style="margin-left: auto;">
+        <h3>History</h3>
+        <div id="history-list"></div>
     </div>
     
     

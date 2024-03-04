@@ -137,6 +137,12 @@ function playVideo() {
         .catch(error => console.error(error));
 }
 
+function playNextVideoInQueue() {
+    fetch('/play-next-video-in-queue')
+        .then(refreshView())
+        .catch(error => console.error(error));
+}
+
 refreshView()
 
 // Connect volume slider

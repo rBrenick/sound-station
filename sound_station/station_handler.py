@@ -22,7 +22,6 @@ class StationHandler(object):
         self.queue = []
         
         self.starting_video_title = ""
-        self.manual_pause = False
         
         thread = threading.Thread(target=self.video_thread)
         thread.start()
@@ -38,9 +37,8 @@ class StationHandler(object):
         self.starting_video_title = self.get_current_video_title()
         
         while True:
-            if not self.manual_pause:
-                if not self.video_is_playing() and len(self.queue) > 0:
-                    self.play_next_in_queue()
+            if not self.video_is_playing() and len(self.queue) > 0:
+                self.play_next_in_queue()
             time.sleep(1)
     
     def add_to_queue(self, url):
@@ -69,12 +67,10 @@ class StationHandler(object):
         history_handler.INSTANCE.add_to_history(url, title)
     
     def pause_video(self):
-        self.manual_pause = True
         self.driver.execute_script("document.getElementById('movie_player').pauseVideo()")
         
     def play_video(self):
         self.driver.execute_script("document.getElementById('movie_player').playVideo()")
-        self.manual_pause = False
         
     def set_volume(self, value):
         self.driver.execute_script(f"document.getElementById('movie_player').setVolume({value})")
@@ -89,7 +85,7 @@ class StationHandler(object):
         # if we're still on the starting "10-hour silence", we can say it's not playing any video
         if self.get_current_video_title() == self.starting_video_title:
             return False
-        return self.driver.execute_script("return document.getElementById('movie_player').getPlayerState()") == 1
+        return self.driver.execute_script("return document.getElementById('movie_player').getPlayerState()") != 0
 
 
 class MockStationHandler():

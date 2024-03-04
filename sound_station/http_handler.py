@@ -55,6 +55,14 @@ class SoundStationHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.send_response(200)
             self.end_headers()
             return
+            
+        elif "/play-next-video-in-queue" in self.path:
+            if len(station_handler.INSTANCE.queue) > 0:
+                station_handler.INSTANCE.play_next_in_queue()
+
+            self.send_response(200)
+            self.end_headers()
+            return
                 
         elif "/pause-video" in self.path:
             station_handler.INSTANCE.pause_video()
