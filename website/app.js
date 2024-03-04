@@ -1,7 +1,7 @@
 // triggered from button in index.html
 // triggers function in start_server.py
-function playVideo() {
-    fetch('/play-video?' + new URLSearchParams({
+function playVideoFromURL() {
+    fetch('/play-video-from-url?' + new URLSearchParams({
         'target_url': document.getElementById("video-url").value
     }))
         .then(refreshView())
@@ -99,10 +99,12 @@ function parseHistory(historyData) {
 
 function parseTitle(titleData) {
     title_element = document.getElementById("current-video-title");
-    if (titleData == ""){
-        titleData = "Unknown"
-    }
     title_element.innerHTML = titleData;
+}
+
+function setVolumeSlider(volumeValue) {
+    volume_slider = document.getElementById("volumeSlider");
+    volume_slider.value = volumeValue;
 }
 
 function refreshView() {
@@ -111,20 +113,42 @@ function refreshView() {
     fetch('./queue-list', {})
         .then((response) => response.json())
         .then((json) => parseQueue(json));
-        
+    
     fetch('./history-list', {})
         .then((response) => response.json())
         .then((json) => parseHistory(json));
-        
+    
     fetch('./current-video-title', {})
         .then((response) => response.json())
         .then((json) => parseTitle(json));
+        
+    fetch('./get-volume', {})
+        .then((response) => response.json())
+        .then((json) => setVolumeSlider(json));
 }
 
-function runFunction() {
-    fetch('/function-name')
-        .then(response => response.json())
+function pauseVideo() {
+    fetch('/pause-video')
+        .catch(error => console.error(error));
+}
+
+function playVideo() {
+    fetch('/play-video')
         .catch(error => console.error(error));
 }
 
 refreshView()
+
+// Connect volume slider
+function updateVolume(newValue) {
+    fetch('/set-volume?' + new URLSearchParams({
+        'value': newValue
+    }))
+        .catch(error => console.error(error));
+}
+
+volume_slider = document.getElementById("volumeSlider");
+volume_slider.oninput = function() {
+  updateVolume(this.value);
+}
+

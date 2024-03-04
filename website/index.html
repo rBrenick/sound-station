@@ -18,7 +18,7 @@
         <button onclick="addToQueue()" id="add-queue-button">
             Add to Queue
         </button>
-        <button onclick="playVideo()" id="play-video-button">
+        <button onclick="playVideoFromURL()" id="play-video-button">
             Play Video
         </button>
     </div>
@@ -26,6 +26,12 @@
     <div style="display: flex;padding-bottom:10px;"">
         <h3>Currently Playing: </h3>
         <h3 id="current-video-title"></h3>
+    </div>
+    
+    <div style="display: flex;padding-bottom:10px;"">
+        <input type="range" min="1" max="100" value="50" id="volumeSlider">
+        <button onclick="pauseVideo()"> || </button>
+        <button onclick="playVideo()"> > </button>
     </div>
     
     <button onclick="refreshView()" id="refresh-queue-button" style="margin-top:30px;margin-bottom:20px;">

@@ -22,6 +22,7 @@ class StationHandler(object):
         self.queue = []
         
         self.starting_video_title = ""
+        self.manual_pause = False
         
         thread = threading.Thread(target=self.video_thread)
         thread.start()
@@ -29,16 +30,17 @@ class StationHandler(object):
     def video_thread(self):
         # play silence to get past cookie prompt
         self.driver.get('https://www.youtube.com/watch?v=g4mHPeMGTJM')
-        self.starting_video_title = self.get_current_video_title()
         cookie_button_xpath = "//button[@aria-label='Accept the use of cookies and other data for the purposes described']"
         # cookie_button_xpath = "//button[@aria-label='Reject the use of cookies and other data for the purposes described']"
         cookie = WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH, cookie_button_xpath)))
         cookie = self.driver.find_element_by_xpath(cookie_button_xpath)
         cookie.click()
+        self.starting_video_title = self.get_current_video_title()
         
         while True:
-            if not self.video_is_playing() and len(self.queue) > 0:
-                self.play_next_in_queue()
+            if not self.manual_pause:
+                if not self.video_is_playing() and len(self.queue) > 0:
+                    self.play_next_in_queue()
             time.sleep(1)
     
     def add_to_queue(self, url):
@@ -56,9 +58,9 @@ class StationHandler(object):
         queue_data = self.queue[0]
         del self.queue[0]
         print(f"Playing queued video: {queue_data.get('title')}")
-        self.play_youtube_video(queue_data.get("url"), queue_data.get("title"))
+        self.play_video_from_url(queue_data.get("url"), queue_data.get("title"))
 
-    def play_youtube_video(self, url, title=None):
+    def play_video_from_url(self, url, title=None):
         
         self.driver.get(url)
         
@@ -66,6 +68,20 @@ class StationHandler(object):
             title = self.get_current_video_title()
         history_handler.INSTANCE.add_to_history(url, title)
     
+    def pause_video(self):
+        self.manual_pause = True
+        self.driver.execute_script("document.getElementById('movie_player').pauseVideo()")
+        
+    def play_video(self):
+        self.driver.execute_script("document.getElementById('movie_player').playVideo()")
+        self.manual_pause = False
+        
+    def set_volume(self, value):
+        self.driver.execute_script(f"document.getElementById('movie_player').setVolume({value})")
+
+    def get_volume(self):
+        return self.driver.execute_script("return document.getElementById('movie_player').getVolume()")
+
     def get_current_video_title(self):
         return self.driver.execute_script("return document.title").replace(" - YouTube", "")
     
