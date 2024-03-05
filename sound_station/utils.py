@@ -23,6 +23,7 @@ def get_video_title(url):
 def get_sanitized_url(url):
     video_url = urllib.parse.unquote(url)
     video_url = video_url.split("&")[0] # strip extra additions
+    video_url = video_url[:75] # clamp url length
     return video_url
 
 
