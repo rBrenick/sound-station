@@ -15,9 +15,13 @@ from . import history_handler
 
 class StationHandler(object):
     def __init__(self):
-        chrome_options = Options()
-        chrome_options.add_extension(os.path.abspath("./.local_db/youtube_extension.zip"))
-        self.driver = webdriver.Chrome(chrome_options=chrome_options)
+        
+        chrome_options = webdriver.ChromeOptions()
+        extension_path = os.path.abspath("./.local_db/youtube_extension.zip")
+        if os.path.exists(extension_path):
+            chrome_options.add_extension(extension_path)
+        
+        self.driver = webdriver.Chrome(options=chrome_options)
 
         self.queue = []
         
@@ -32,9 +36,11 @@ class StationHandler(object):
         cookie_button_xpath = "//button[@aria-label='Accept the use of cookies and other data for the purposes described']"
         # cookie_button_xpath = "//button[@aria-label='Reject the use of cookies and other data for the purposes described']"
         cookie = WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH, cookie_button_xpath)))
-        cookie = self.driver.find_element_by_xpath(cookie_button_xpath)
+        cookie = self.driver.find_element(By.XPATH, cookie_button_xpath)
         cookie.click()
+        time.sleep(3)
         self.starting_video_title = self.get_current_video_title()
+        self.pause_video()
         
         while True:
             if not self.video_is_playing() and len(self.queue) > 0:
